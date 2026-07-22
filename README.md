@@ -70,16 +70,6 @@ ENSEMBLE    = "npt_iso" # "nvt", "npt_iso", "npt_aniso", "nve", "optimize"
 python ase_DEMFF_simulation.py
 ```
 
-### Available Ensembles
-
-| Ensemble | Description | Typical Use |
-|----------|-------------|-------------|
-| `nvt` | Bussi stochastic velocity rescaling | Production runs at fixed volume |
-| `npt_iso` | MTK isotropic NPT (Nosé-Hoover chains) | Equilibration and production of liquids/melts |
-| `npt_aniso` | MTK full-cell NPT (Nosé-Hoover chains) | Crystals, two-phase simulations, melting point |
-| `nve` | Velocity Verlet (microcanonical) | Transport properties, benchmarking |
-| `optimize` | LBFGS cell + position optimization | Static structure relaxation |
-
 ### Output Files
 
 | File | Content |
