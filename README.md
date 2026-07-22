@@ -1,19 +1,17 @@
-# DEM-FF: Deep Earth Mantle Force Field
+# DEM-FF: Deep Earth Materials Force Field
 
-A MACE-LES (Long-range Equivariant Solver) machine learning interatomic potential for simulating deep Earth materials at extreme conditions.
+A Universal Machine Learning Force Field for Earth’s Interior Studies
 
-## Supported Elements
+## Supported Elements (25)
 
 H, He, B, C, N, O, F, Ne, Na, Mg, Al, Si, P, S, Cl, Ar, K, Ca, Ti, Mn, Fe, Ni, Kr, Xe, W
 
-(25 elements, Z = 1, 2, 5–10, 11–20, 22, 25, 26, 28, 36, 54, 74)
-
 ## Features
 
-- Energy, forces, stress, and virial predictions
-- Long-range electrostatics via learned latent charges (LES)
+- Supports simulation of minerals, fluids, silicate melts, Fe-alloys (or possibly any system composed of supported elements) up to 360 GPa and 12,000 K
+- Long-range electrostatics via Latent Ewald Summation (LES)
 - Electronic temperature dependence
-- GPU-accelerated via CUDA (with optional cuequivariance support)
+- Free energy calculation via thermodynamic integration from the Uhlenbeck–Ford model (UFM) reference potential (p = 50, σ = 1.2 Å)
 
 ## Installation
 
@@ -52,9 +50,9 @@ See: https://wiki.fysik.dtu.dk/ase/
 
 ## Quick Start
 
-### Run a simulation
+### Simulation Example
 
-1. Place your input structure as `POSCAR` in the working directory.
+1. Place your input structure (e.g., `POSCAR`) in the working directory.
 2. Place the model file `DEMFF.model` in the same directory.
 3. Edit the USER SETTINGS section in `ase_DEMFF_simulation.py`:
 
@@ -82,14 +80,6 @@ python ase_DEMFF_simulation.py
 | `nve` | Velocity Verlet (microcanonical) | Transport properties, benchmarking |
 | `optimize` | LBFGS cell + position optimization | Static structure relaxation |
 
-### Recommended Timesteps
-
-| System | Timestep |
-|--------|----------|
-| Metals (Fe, Ni, ...) | 1.0 fs |
-| Silicates / oxides | 0.5–1.0 fs |
-| Hydrous systems (H₂O) | 0.5 fs |
-
 ### Output Files
 
 | File | Content |
@@ -111,20 +101,40 @@ APPEND          = True         # append to existing output files
 
 ## Electronic Temperature
 
-DEM-FF models support electronic temperature as an input feature. This is set automatically from the simulation temperature:
+DEM-FF uses electronic temperature as an input feature, which is set automatically from the simulation temperature:
 
 ```python
 atoms.info["elec_temp"] = temperature_K * 8.61733e-5  # in eV
 ```
 
-This is handled internally by the simulation script. For custom workflows, ensure `elec_temp` is set in `atoms.info` and pass `info_keys={"elec_temp": "elec_temp"}` to `MACECalculator`.
+This is handled internally by `ase_DEMFF_simulation.py`. For custom workflows, set `elec_temp` in `atoms.info` and pass `info_keys={"elec_temp": "elec_temp"}` to `MACECalculator`.
+
+## Using DEM-FF in Custom Scripts
+
+```python
+import torch
+from ase.io import read
+from mace.calculators import MACECalculator
+
+atoms = read("POSCAR")
+atoms.info["elec_temp"] = 4000.0 * 8.61733e-5  # eV
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+calc = MACECalculator(
+    model_paths="DEMFF.model",
+    default_dtype="float32",
+    device=device,
+    info_keys={"elec_temp": "elec_temp"},
+)
+atoms.calc = calc
+
+energy = atoms.get_potential_energy()       # eV
+forces = atoms.get_forces()                 # eV/Ang
+stress = atoms.get_stress(voigt=False)      # eV/Ang^3 (3x3)
+```
 
 ## Citation
 
 If you use DEM-FF in your research, please cite:
 
-[Citation information to be added]
-
-## License
-
-[License information to be added]
+> K. Wang, Y. Zhang, X. Lu. DEM-FF: A Universal Machine Learning Force Field for Earth's Interior Studies. DOI: [10.21203/rs.3.rs-9140615/v1](https://doi.org/10.21203/rs.3.rs-9140615/v1)
