@@ -119,55 +119,6 @@ atoms.info["elec_temp"] = temperature_K * 8.61733e-5  # in eV
 
 This is handled internally by the simulation script. For custom workflows, ensure `elec_temp` is set in `atoms.info` and pass `info_keys={"elec_temp": "elec_temp"}` to `MACECalculator`.
 
-## Using DEM-FF in Custom Scripts
-
-```python
-import torch
-from ase.io import read
-from mace.calculators import MACECalculator
-
-atoms = read("POSCAR")
-atoms.info["elec_temp"] = 4000.0 * 8.61733e-5  # eV
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-calc = MACECalculator(
-    model_paths="DEMFF.model",
-    default_dtype="float32",
-    device=device,
-    info_keys={"elec_temp": "elec_temp"},
-)
-atoms.calc = calc
-
-energy = atoms.get_potential_energy()       # eV
-forces = atoms.get_forces()                 # eV/Å
-stress = atoms.get_stress(voigt=False)      # eV/Å³ (3×3)
-```
-
-## Typical Workflow
-
-### Single-phase melt properties
-
-```
-1. Build initial structure (random or from experiment)
-2. Melt at high T (NVT, 8000 K, ~50 ps)
-3. Quench to target T (NVT, short)
-4. NPT equilibration at target (T, P)
-5. Average cell volume from last 60% of NPT
-6. NVT or NVE production at averaged cell
-7. Analyze trajectory (RDF, MSD, diffusion, species)
-```
-
-### Melting point (two-phase coexistence)
-
-```
-1. Build crystal supercell (elongated along one axis)
-2. NPT equilibrate at trial T
-3. Melt one half (fix bottom, NVT melt top at 8000 K)
-4. Release constraints → NPT/NPH production
-5. If crystal grows → T < Tm; if shrinks → T > Tm
-6. Binary search on T
-```
-
 ## Citation
 
 If you use DEM-FF in your research, please cite:
