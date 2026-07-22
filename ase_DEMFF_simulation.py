@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 ase_DEMFF_simulation.py — Run MD simulations with DEM-FF (MACE-LES) models.
 
