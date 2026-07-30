@@ -8,7 +8,7 @@ H, He, B, C, N, O, F, Ne, Na, Mg, Al, Si, P, S, Cl, Ar, K, Ca, Ti, Mn, Fe, Ni, K
 
 ## Features
 
-- Supports simulation of minerals, fluids, silicate melts, Fe-alloys (or possibly any system composed of supported elements) up to 360 GPa and 12,000 K
+- Supports simulation of minerals, fluids, silicate melts, Fe-alloys (or possibly any system composed of supported elements) up to 360 GPa and 10,000+ K
 - Long-range electrostatics via Latent Ewald Summation (LES)
 - Electronic temperature dependence
 - Free energy calculation via thermodynamic integration from the Uhlenbeck–Ford model (UFM) reference potential (p = 50, σ = 1.2 Å)
