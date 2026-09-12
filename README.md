@@ -123,6 +123,13 @@ forces = atoms.get_forces()                 # eV/Ang
 stress = atoms.get_stress(voigt=False)      # eV/Ang^3 (3x3)
 ```
 
+## Optional DeePMD Integration
+
+An experimental [DeePMD adapter](integrations/deepmd/README.md) provides Python
+inference and native PyTorch fine-tuning of the complete DEM-FF MACE-LES model
+with explicit electronic-temperature inputs. Install its dependencies separately;
+see the integration documentation for validation and current limitations.
+
 ## Citation
 
 If you use DEM-FF in your research, please cite:

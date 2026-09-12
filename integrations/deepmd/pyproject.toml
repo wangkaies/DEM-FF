@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepmd-demff"
+version = "0.1.0"
+description = "Experimental DeePMD Python inference and native PyTorch training for DEM-FF"
+requires-python = ">=3.11"
+dependencies = ["deepmd-kit==3.2.0", "mace-torch==0.3.16", "ase", "numpy", "les"]
+
+[project.entry-points."deepmd.backend"]
+demff = "deepmd_demff.backend:DEMFFBackend"
+
+[project.entry-points."deepmd.pt"]
+demff = "deepmd_demff.pt:load"
+
+[project.scripts]
+demff-deepmd = "deepmd_demff.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
