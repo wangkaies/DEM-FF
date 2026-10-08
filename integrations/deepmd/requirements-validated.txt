@@ -1,0 +1,6 @@
+# Install an appropriate PyTorch 2.10.0 build first; see README.
+deepmd-kit==3.2.0
+mace-torch==0.3.16
+e3nn==0.4.4
+ase==3.29.0
+les @ git+https://github.com/ChengUCB/les.git@35b971a650cf30adb84fef7138761e81aa47b3a2

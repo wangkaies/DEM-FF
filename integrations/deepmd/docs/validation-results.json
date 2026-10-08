@@ -1,0 +1,294 @@
+{
+  "environment": {
+    "python": "3.12.13",
+    "versions": {
+      "deepmd-demff": "0.1.0",
+      "deepmd-kit": "3.2.0",
+      "mace-torch": "0.3.16",
+      "e3nn": "0.4.4",
+      "ase": "3.29.0",
+      "les": "0.2.0",
+      "torch": "2.10.0"
+    },
+    "cuda_available": true,
+    "torch_cuda": "12.9",
+    "gpu": "NVIDIA A100-SXM4-80GB"
+  },
+  "inference": {
+    "purpose": "interface parity and derivative verification; NOT DFT accuracy",
+    "device": "cuda",
+    "model_sha256": "f8f55225fda02adc4b768d71bc4dd4cadafb876b725c406b44934b9a63be91ca",
+    "checks": {
+      "author_350_atoms": {
+        "energy_eV": 0.0,
+        "force_eV_A": 7.105427357601002e-15,
+        "virial_eV": 9.365740993430336,
+        "native_virial_parity_required": false,
+        "reason": "MACE 0.3.16 native stress omits explicit LES strain; corrected virial checked by finite differences"
+      },
+      "author_350_virial_fd_abs_errors_eV": [
+        9.89205091173062e-07,
+        1.0659539384505479e-06,
+        9.767718438524753e-07,
+        5.903725508460411e-09,
+        7.421245840077972e-10,
+        8.85900988123467e-08
+      ],
+      "triclinic": {
+        "energy_eV": 0.0,
+        "force_eV_A": 1.0824674490095276e-15,
+        "virial_eV": 0.1303440415682272,
+        "native_virial_parity_required": false,
+        "reason": "MACE 0.3.16 native stress omits explicit LES strain; corrected virial checked by finite differences"
+      },
+      "rotation_covariance": {
+        "energy_eV": 5.818609594143709e-09,
+        "force_eV_A": 9.081274177091814e-09,
+        "virial_eV": 1.0729820462684891e-08
+      },
+      "atom_permutation": {
+        "energy_eV": 3.552713678800501e-15,
+        "force_eV_A": 1.5543122344752192e-15,
+        "virial_eV": 8.881784197001252e-16
+      },
+      "periodic_image": {
+        "energy_eV": 7.105427357601002e-15,
+        "force_eV_A": 4.39648317751562e-14,
+        "virial_eV": 3.5083047578154947e-14
+      },
+      "temperature_batch": {
+        "energy_eV": 0.0,
+        "force_eV_A": 1.9984014443252818e-15,
+        "virial_eV": 0.1303440415682261,
+        "native_virial_parity_required": false,
+        "reason": "MACE 0.3.16 native stress omits explicit LES strain; corrected virial checked by finite differences"
+      },
+      "temperature_energy_change_eV": 0.13023481677531024,
+      "les_energy_eV": -1.1942502478790924,
+      "force_fd_abs_error_eV_A": 6.32552464407965e-07,
+      "virial_fd_abs_errors_eV": [
+        1.114098635568439e-08,
+        7.786903566397996e-09,
+        2.427695301732147e-10,
+        6.839506738742784e-11,
+        4.82085482644834e-11,
+        2.462403614345021e-10
+      ],
+      "rejected_inputs": [
+        "missing_temperature",
+        "atomic_outputs",
+        "negative_temperature"
+      ],
+      "dp_test_exit_code": 0,
+      "dp_test_max_abs_errors": {
+        "e": 7.105427357601002e-15,
+        "f": 1.4432899320127035e-15,
+        "v": 1.1208412420415925e-08
+      }
+    },
+    "versions": {
+      "torch": "2.10.0",
+      "deepmd-kit": "3.2.0",
+      "mace-torch": "0.3.16",
+      "les": "0.2.0",
+      "ase": "3.29.0",
+      "deepmd-demff": "0.1.0"
+    },
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "type_map": [
+      "H",
+      "He",
+      "B",
+      "C",
+      "N",
+      "O",
+      "F",
+      "Ne",
+      "Na",
+      "Mg",
+      "Al",
+      "Si",
+      "P",
+      "S",
+      "Cl",
+      "Ar",
+      "K",
+      "Ca",
+      "Ti",
+      "Mn",
+      "Fe",
+      "Ni",
+      "Kr",
+      "Xe",
+      "W"
+    ],
+    "author_system_natoms": 350,
+    "elapsed_seconds": 23.124178886413574,
+    "status": "PASS"
+  },
+  "training": {
+    "status": "PASS",
+    "purpose": "software training integration, NOT scientific acceptance",
+    "conditioning": "explicit synthetic kBT in eV; labels are NOT DFT",
+    "checks": {
+      "trainable_parameters": 556064,
+      "energy_gradient": {
+        "group_norms": {
+          "mace.interactions": 0.074507908535089,
+          "mace.les_readouts": 0.0835007874626925,
+          "mace.joint_embedding": 0.045799360563534175
+        },
+        "parameter": "mace.les_readouts.1.linear_2.weight",
+        "index": 12,
+        "analytic": 0.042725416359612814,
+        "finite_difference": 0.0427254163751136
+      },
+      "force_gradient": {
+        "group_norms": {
+          "mace.interactions": 0.007644715988434203,
+          "mace.les_readouts": 0.001508680271283013,
+          "mace.joint_embedding": 0.0013564361802834014
+        },
+        "parameter": "mace.les_readouts.1.linear_2.weight",
+        "index": 15,
+        "analytic": 0.0006879001838473902,
+        "finite_difference": 0.0006879001844767393
+      },
+      "virial_gradient": {
+        "group_norms": {
+          "mace.interactions": 0.01871251928673434,
+          "mace.les_readouts": 0.006275169126954538,
+          "mace.joint_embedding": 0.0029434201591934887
+        },
+        "parameter": "mace.les_readouts.1.linear_2.weight",
+        "index": 15,
+        "analytic": -0.0033064538526312347,
+        "finite_difference": -0.003306453852901236
+      },
+      "weight_updates": {
+        "mace.interactions": 1.1976097055832469e-05,
+        "mace.les_readouts": 1.1962477784788206e-05,
+        "mace.joint_embedding": 1.1971025307366823e-05
+      },
+      "same_six_frame_loss": {
+        "before": 0.0004166666666666588,
+        "after": 0.0003293079696175392
+      },
+      "checkpoint_extra_initial": {
+        "lr": 1e-06,
+        "step": 11
+      },
+      "checkpoint_extra_restart": {
+        "lr": 1e-06,
+        "step": 15
+      },
+      "reload_max_abs": {
+        "energy": 0.0,
+        "force": 2.1510571102112408e-15,
+        "virial": 3.344546861683284e-15
+      },
+      "export_max_abs": {
+        "energy": 0.0,
+        "force": 1.5126788710517758e-15,
+        "virial": 2.0539125955565396e-15
+      },
+      "exported_standard_dp_test": {
+        "exit_code": 0,
+        "frames": 2,
+        "scientific_acceptance": false
+      },
+      "initial_lcurve": {
+        "rows": 12,
+        "first": [
+          1.0,
+          0.0202,
+          0.0204,
+          0.00826,
+          0.00833,
+          6.93e-05,
+          9.08e-16,
+          1.64e-05,
+          3.28e-16,
+          1e-06
+        ],
+        "last": [
+          12.0,
+          0.0181,
+          0.0184,
+          0.0074,
+          0.00749,
+          0.000735,
+          0.000763,
+          0.000181,
+          0.000182,
+          1e-06
+        ]
+      },
+      "restart_lcurve": {
+        "rows": 5,
+        "first": [
+          12.0,
+          0.0179,
+          0.0182,
+          0.00732,
+          0.0074,
+          0.000783,
+          0.000813,
+          0.000193,
+          0.000196,
+          1e-06
+        ],
+        "last": [
+          16.0,
+          0.0172,
+          0.0175,
+          0.00702,
+          0.00712,
+          0.00109,
+          0.00109,
+          0.000255,
+          0.000267,
+          1e-06
+        ]
+      },
+      "finetune_lcurve": {
+        "rows": 4,
+        "first": [
+          1.0,
+          0.0179,
+          0.0182,
+          0.00732,
+          0.0074,
+          0.000785,
+          0.000813,
+          0.000193,
+          0.000196,
+          1e-06
+        ],
+        "last": [
+          4.0,
+          0.0174,
+          0.0177,
+          0.00708,
+          0.00719,
+          0.000942,
+          0.00105,
+          0.000231,
+          0.000258,
+          1e-06
+        ]
+      }
+    },
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "data_source": {
+      "purpose": "software smoke test only",
+      "atoms": 6,
+      "elements_exercised": [
+        "O",
+        "H"
+      ],
+      "seed": 20260912,
+      "energy_shift_eV": 0.05
+    }
+  }
+}
